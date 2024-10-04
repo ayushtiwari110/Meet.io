@@ -1,3 +1,4 @@
+"use client";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -10,13 +11,13 @@ import { useEffect } from 'react';
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "Meet.io",
-  description: "One place for all your meetings!",
-  icons: {
-    icon: '/icon/logo.svg'
-  }
-};
+// export const metadata: Metadata = {
+//   title: "Meet.io",
+//   description: "One place for all your meetings!",
+//   icons: {
+//     icon: '/icon/logo.svg'
+//   }
+// };
 
 export default function RootLayout({
   children,

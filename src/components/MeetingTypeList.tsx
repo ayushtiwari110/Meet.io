@@ -11,6 +11,7 @@ import { Textarea } from './ui/textarea';
 import ReactDatePicker from 'react-datepicker';
 import { Input } from './ui/input';
 import { gapi } from 'gapi-script';
+import { sendPushNotification } from '@/utils/pushNotifications';
 
 const MeetingTypeList = () => {
   const router = useRouter()
@@ -62,6 +63,9 @@ const MeetingTypeList = () => {
 
       // Add meeting to Google Calendar
       addMeetingToGoogleCalendar(description, startsAt);
+
+      // Send push notification
+      sendPushNotification(user.id, 'New Meeting Created', `Meeting: ${description} at ${startsAt}`);
 
     } catch (error) {
       console.log(error)
