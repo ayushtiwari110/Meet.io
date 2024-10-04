@@ -10,6 +10,8 @@ import { useToast } from './ui/use-toast';
 import { Textarea } from './ui/textarea';
 import ReactDatePicker from 'react-datepicker';
 import { Input } from './ui/input';
+import { gapi } from 'gapi-script';
+
 const MeetingTypeList = () => {
   const router = useRouter()
   const [meetingState, setmeetingState] = useState<'isScheduledMeeting' | 'isJoiningMeeting' | 'isInstantMeeting' | undefined>()
@@ -57,6 +59,10 @@ const MeetingTypeList = () => {
       toast({
         title: "Meeting Created!",
       })
+
+      // Add meeting to Google Calendar
+      addMeetingToGoogleCalendar(description, startsAt);
+
     } catch (error) {
       console.log(error)
       toast({
@@ -64,6 +70,29 @@ const MeetingTypeList = () => {
       })
     }
   }
+
+  const addMeetingToGoogleCalendar = (description: string, startsAt: string) => {
+    const event = {
+      summary: description,
+      start: {
+        dateTime: startsAt,
+        timeZone: 'America/Los_Angeles',
+      },
+      end: {
+        dateTime: new Date(new Date(startsAt).getTime() + 60 * 60 * 1000).toISOString(),
+        timeZone: 'America/Los_Angeles',
+      },
+    };
+
+    gapi.client.calendar.events.insert({
+      calendarId: 'primary',
+      resource: event,
+    }).then((response: any) => {
+      console.log('Event created: ', response);
+    }).catch((error: any) => {
+      console.log('Error creating event: ', error);
+    });
+  };
 
   const meetingLink = `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${callDetails?.id}`
 
